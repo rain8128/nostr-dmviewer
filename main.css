@@ -1,0 +1,12 @@
+#box{
+    overflow:scroll;
+    border:solid 1px black;
+    height: 100%;
+}
+
+
+.message{
+    box-sizing: border-box;
+    width:100%;
+    border:1px black solid;
+}
