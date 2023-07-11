@@ -12,16 +12,19 @@ window.onload=()=>{
         ws.onmessage=(m)=>{
             const data=JSON.parse(m.data);
             if(data[0]=="EVENT"){
+                const pubkey = document.createElement("div");
+                pubkey.innerText = data[2].pubkey;
+                const content = document.createElement("div");
+                content.innerText = "decrypting...";
+                const message = document.createElement("div");
+                message.className = "message";
+                message.appendChild(pubkey);
+                message.appendChild(content);
+                box.prepend(message);
                 nostr.nip04.decrypt(data[2].pubkey,data[2].content).then(text=>{
-                    pubkey = document.createElement("div");
-                    pubkey.innerText = data[2].pubkey;
-                    content = document.createElement("div");
                     content.innerText = text;
-                    message = document.createElement("div");
-                    message.className = "message";
-                    message.appendChild(pubkey);
-                    message.appendChild(content);
-                    box.prepend(message);
+                },()=>{
+                    content.innerText = "failed to decrypt"
                 })
             }
         }
