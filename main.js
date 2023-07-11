@@ -8,7 +8,7 @@ window.onload=()=>{
         const relayUrl = document.getElementById("relay").value;
         ws = new WebSocket(relayUrl);
         ws.onopen=()=>{state.innerText = "connected";}
-        ws.onclose=()=>{state.innerText = "closed";}
+        ws.onclose=()=>{state.innerText = "disconnected";}
         ws.onmessage=(m)=>{
             const data=JSON.parse(m.data);
             if(data[0]=="EVENT"){
@@ -24,8 +24,8 @@ window.onload=()=>{
                 nostr.nip04.decrypt(data[2].pubkey,data[2].content).then(text=>{
                     content.innerText = text;
                 },()=>{
-                    content.innerText = "failed to decrypt"
-                })
+                    content.innerText = "failed to decrypt";
+                });
             }
         }
     }
