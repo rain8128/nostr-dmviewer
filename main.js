@@ -65,11 +65,18 @@ window.onload=()=>{
                             reject("not found");
                         }
                     }
-                    const et = new EventTarget();
-                    et.addEventListener("found",()=>resolve(Profiles.get(pubkey)));
-                    et.addEventListener("not found",()=>reject("not found"));
-                    tmp.set(pubkey,et);
-                    ws.send(JSON.stringify(["REQ","profile:"+pubkey,{kinds:[0],authors:[pubkey],limit:1}]));
+                    if(tmp.has(pubkey)){
+                        const et = tmp.get(pubkey);
+                        et.addEventListener("found",()=>resolve(Profiles.get(pubkey)));
+                        et.addEventListener("not found",()=>reject("not found"));
+                        
+                    }else{
+                        const et = new EventTarget();
+                        et.addEventListener("found",()=>resolve(Profiles.get(pubkey)));
+                        et.addEventListener("not found",()=>reject("not found"));
+                        tmp.set(pubkey,et);
+                        ws.send(JSON.stringify(["REQ","profile:"+pubkey,{kinds:[0],authors:[pubkey],limit:1}]));
+                    }
                 })
             };
         }
